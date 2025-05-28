@@ -1,0 +1,24 @@
+{
+  "name": "rup-reportmenu-ui",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "watch": "vite build --watch"
+  },
+  "dependencies": {
+    "sass": "^1.69.0",
+    "vue": "^3.3.4",
+    "vue-router": "^4.2.5",
+    "pinia": "^2.1.6",
+    "@vueuse/core": "^10.4.1",
+    "date-fns": "^2.30.0"
+  },
+  "devDependencies": {
+    "vite": "^4.4.11",
+    "@vitejs/plugin-vue": "^4.3.4",
+    "@types/node": "^20.6.3",
+    "typescript": "^5.2.2"
+  }
+}

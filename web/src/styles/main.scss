@@ -1,0 +1,139 @@
+@use 'sass:map';
+@use 'sass:color';
+
+// Theme variables
+$themes: (  light: (
+    'background': #f0f2f5,
+    'surface': #ffffff,
+    'surface-secondary': #f8f9fa,
+    'border': #c5c7ca,
+    'border-light': #eef0f2,
+    'text': #1f2937,
+    'text-secondary': #4b5563,
+    'message-bg': #dcdee0,
+    'hover': #f3f4f6,
+    'hover-secondary': #4A90E2,
+    'button': #1a73e8,
+    'shadow': rgba(0, 0, 0, 0.05)
+  ),
+  dark: (
+    'background': #1a1a1a,
+    'surface': #2d2d2d,
+    'border': #404040,
+    'text': #ffffff,
+    'text-secondary': rgba(255, 255, 255, 0.7),
+    'hover': #383838,
+    'button': #1a73e8,
+    'message-bg': #383838,
+  )
+);
+
+// Base colors
+$colors: (
+  'primary': #4A90E2,
+  'success': #27AE60,
+  'warning': #F2C94C,
+  'danger': #EB5757
+);
+
+// Theme functions
+@function theme-var($key) {
+  @return var(--theme-#{$key});
+}
+
+// Reset & Base styles
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  transition: background-color 0.6s ease, color 0.6s ease, border-color 0.6s ease;
+}
+
+// Theme Initialization
+:root {
+  @each $name, $color in $colors {
+    --#{$name}-color: #{$color};
+  }
+  
+  // Set default light theme variables
+  @each $key, $value in map.get($themes, 'light') {
+    --theme-#{$key}: #{$value};
+  }
+}
+
+// Dark theme class
+.theme-dark {
+  @each $key, $value in map.get($themes, 'dark') {
+    --theme-#{$key}: #{$value};
+  }
+}
+
+body {
+  background: transparent; // production
+  //background: grey; // Uncomment for better visibility
+  color: theme-var('text');
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// Priority colors
+.priority {
+  &-high {
+    color: var(--danger-color);
+    background: rgba(235, 87, 87, 0.2);
+  }
+  &-medium {
+    color: var(--warning-color);
+    background: rgba(242, 201, 76, 0.2);
+  }
+  &-low {
+    color: var(--success-color);
+    background: rgba(39, 174, 96, 0.2);
+  }
+}
+
+// Status colors
+.status {
+  &-open {
+    color: var(--success-color);
+    background: rgba(39, 174, 96, 0.2);
+  }
+  &-in_progress {
+    color: var(--warning-color);
+    background: rgba(242, 201, 76, 0.2);
+  }
+  &-closed {
+    color: var(--danger-color);
+    background: rgba(235, 87, 87, 0.2);
+  }
+}
+
+// Common components
+.card {
+  background: theme-var('surface');
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  color: theme-var('text');
+  border: 1px solid theme-var('border');
+}
+
+.button {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.9;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}

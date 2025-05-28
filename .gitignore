@@ -1,0 +1,4 @@
+# Node modules
+web/node_modules
+# Build output
+web/package-lock.json
