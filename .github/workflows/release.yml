@@ -4,6 +4,12 @@ on:
   push:
     tags:
       - '*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version number for manual release'
+        required: true
+        default: 'v1.0.0'
 
 jobs:
   build-and-release:
@@ -30,12 +36,16 @@ jobs:
       - name: Zip resource
         run: |
           cd resources/[ruptz]
-          zip -r Rup-ReportMenu.zip Rup-ReportMenu -x '*/node_modules/*' '*/.git/*' '*/.env*' '*/.vscode/*'
+          zip -r Rup-ReportMenu.zip Rup-ReportMenu -x '*/node_modules/*' '*/.git/*' '*/.env*' '*/.vscode/*' '*/.github/*'
           mv Rup-ReportMenu.zip ../../..
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           files: Rup-ReportMenu.zip
+          tag_name: ${{ github.ref_name || github.event.inputs.version }}
+          name: Release ${{ github.ref_name || github.event.inputs.version }}
+          draft: false
+          prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
