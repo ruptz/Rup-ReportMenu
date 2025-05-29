@@ -67,6 +67,10 @@ Config.Cooldowns = {
 - Copy player identifiers
 - Detailed report tracking
 
+### TODO
+- Add discord logging
+- Add teleporting to players etc
+
 ## 💡 Support
 
 Found a bug or need help? 
