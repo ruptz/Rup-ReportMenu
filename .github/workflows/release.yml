@@ -25,12 +25,12 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd resources/[ruptz]/Rup-ReportMenu/web
+          cd web
           npm ci
 
       - name: Build web UI
         run: |
-          cd resources/[ruptz]/Rup-ReportMenu/web
+          cd web
           npm run build
 
       - name: Zip resource
