@@ -656,7 +656,6 @@ onMounted(async () => {
   
   window.addEventListener('message', (event) => {
     if (event.data.type === 'updateMessages' && report.value) {
-      console.log('Updating messages for report:', event.data.id)
       updateMessages(event.data.id)
     }
   })

@@ -6,8 +6,8 @@ description 'Report Menu System for Standalone'
 version '1.0.0'
 lua54 'yes'
 
---ui_page 'web/dist/index.html'
-ui_page 'http://localhost:3000' -- Only use this for development
+ui_page 'web/dist/index.html'
+--ui_page 'http://localhost:3000' -- Only use this for development
 
 shared_scripts {
     '@ox_lib/init.lua',

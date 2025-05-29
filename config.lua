@@ -1,7 +1,7 @@
 Config = {}
 
-Config.Debug = true
-Config.DebugPrint = true
+Config.Debug = false
+Config.DebugPrint = false
 
 -- Permissions
 Config.Permissions = {
