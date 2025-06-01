@@ -1,0 +1,16 @@
+=== REPORT TRANSCRIPT ===
+Report ID: 2
+Title: This is a transcript example
+Reporter: Ruptz
+Status: open
+Priority: high
+Created: 1748785937000.0
+Deleted by: Ruptz
+Deleted at: 2025-06-01 08:59:11 UTC
+
+=== DESCRIPTION ===
+This is a transcript example!
+
+=== MESSAGES ===
+[2025-06-01 14:58:58] Ruptz: Hello!
+[2025-06-01 14:59:02] Ruptz: This is an example output!!!
