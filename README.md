@@ -8,6 +8,8 @@
 - 🔍 Filtering and sorting options
 - 🔐 Granular permission system
 - ⚡ Performance optimized
+- 📜 Transcripts for deleted reports
+- 📡 Discord webhook logging
 - 🎮 Player-friendly reporting interface
 - 📊 Status tracking (Open, In Progress, Closed)
 - 🚨 Priority levels (Low, Medium, High)
@@ -67,8 +69,40 @@ Config.Cooldowns = {
 - Copy player identifiers
 - Detailed report tracking
 
+## 📜 Transcripts
+
+### Automatic Transcript Generation
+- When a report is deleted, a transcript of all messages is automatically generated.
+- Transcripts are saved locally in the `transcripts/` folder.
+- The transcript file is also attached to the Discord webhook for easy access.
+
+### Transcript Format
+- Includes report metadata (ID, title, reporter, status, priority).
+- Contains all messages in chronological order.
+- Supports media attachments with URLs.
+
+## 📡 Discord Logging
+
+### Webhook Integration
+- All report actions (creation, deletion) are logged to Discord.
+- Rich embeds provide detailed information about the report.
+- Deleted reports include a transcript file attachment.
+
+### Configuration
+Edit `config.lua` to enable Discord logging:
+```lua
+Config.Discord = {
+    Enabled = true, -- Set to true to enable Discord integration
+    Webhook = 'https://discord.com/api/webhooks/YOUR_WEBHOOK_URL', -- Replace with your actual webhook URL
+    ImageUrl = 'https://i.imgur.com/OZyXBv0.png',
+    CreateEmbedColor = 65280, -- Green
+    ReportEmbedColor = 16711680 -- Red
+}
+```
+
+> ℹ️ **Note:** Ensure your webhook URL is valid, read this if you dont know how to make a webhook [Guide](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks)
+
 ### TODO
-- Add discord logging
 - Add teleporting to players etc
 
 ## 💡 Support
