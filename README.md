@@ -104,6 +104,7 @@ Config.Discord = {
 
 ### TODO
 - Add teleporting to players etc
+- Looking into media uploading (Videos, Pictures, etc.)
 
 ## 💡 Support
 
