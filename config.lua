@@ -20,3 +20,12 @@ Config.Cooldowns = {
     Report = 10000, -- 10 seconds
     Theme = 10000   -- 10 seconds
 }
+
+-- Discord Webhook
+Config.Discord = {
+    Enabled = false, -- Set to true to enable Discord integration
+    Webhook = 'https://discord.com/api/webhooks/YOUR_WEBHOOK_URL', -- Replace with your actual webhook URL
+    ImageUrl = 'https://i.imgur.com/OZyXBv0.png', 
+    ReportEmbedColor = 16711680, -- Red
+    CreateEmebedColor = 65280, -- Green
+}

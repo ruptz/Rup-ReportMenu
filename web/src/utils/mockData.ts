@@ -171,6 +171,58 @@ export const mockReports: Report[] = [
     created_at: format(subHours(new Date(), 5), 'yyyy-MM-dd HH:mm:ss'),
     updated_at: format(subHours(new Date(), 3), 'yyyy-MM-dd HH:mm:ss')
   },
+    {
+    id: 12,
+    player_id: 'STEAM:9981',
+    player_name: 'Parker Lewis',
+    reported_id: null,
+    reported_name: null,
+    title: 'Stuck in car',
+    description: 'I am stuck in my car and cannot get out, I tried relogging but it did not work',
+    status: 'in_progress',
+    priority: 'high',
+    created_at: format(subHours(new Date(), 5), 'yyyy-MM-dd HH:mm:ss'),
+    updated_at: format(subHours(new Date(), 3), 'yyyy-MM-dd HH:mm:ss')
+  },
+  {
+    id: 13,
+    player_id: 'STEAM:67691',
+    player_name: 'Sarah Connor',
+    reported_id: null,
+    reported_name: null,
+    title: 'Cannot access inventory',
+    description: 'I cannot access my inventory, it is stuck on loading',
+    status: 'open',
+    priority: 'medium',
+    created_at: format(subHours(new Date(), 5), 'yyyy-MM-dd HH:mm:ss'),
+    updated_at: format(subHours(new Date(), 3), 'yyyy-MM-dd HH:mm:ss')
+  },
+  {
+    id: 14,
+    player_id: 'STEAM:545452524',
+    player_name: 'Michael Bay',
+    reported_id: null,
+    reported_name: null,
+    title: 'Cannot spawn vehicle',
+    description: 'I cannot spawn my vehicle, it says I have no vehicles',
+    status: 'open',
+    priority: 'high',
+    created_at: format(subHours(new Date(), 5), 'yyyy-MM-dd HH:mm:ss'),
+    updated_at: format(subHours(new Date(), 3), 'yyyy-MM-dd HH:mm:ss')
+  },
+  {
+    id: 15,
+    player_id: 'STEAM:653543534',
+    player_name: 'Alice Wonderland',
+    reported_id: null,
+    reported_name: null,
+    title: 'Cannot use emotes',
+    description: 'I cannot use emotes, it says I have no emotes',
+    status: 'open',
+    priority: 'low',
+    created_at: format(subHours(new Date(), 5), 'yyyy-MM-dd HH:mm:ss'),
+    updated_at: format(subHours(new Date(), 3), 'yyyy-MM-dd HH:mm:ss')
+  },
 ]
 
 export const mockMessages: Message[] = [

@@ -344,6 +344,7 @@ select {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   height: calc(90vh - 200px);
+  min-width: 0;
 }
 
 .messages {
@@ -389,12 +390,14 @@ select {
       color: theme-var('text');
     }
   }
-
   .message-content {
     background: theme-var('background');
     padding: 12px 16px;
     border-radius: 8px;
     max-width: 80%;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
 
     .message-header {
       display: flex;
@@ -420,6 +423,10 @@ select {
       letter-spacing: 0.5px;
       line-height: 1.4;
       font-size: 14px;
+      word-wrap: break-word;
+      word-break: break-word;
+      overflow-wrap: break-word;
+      white-space: pre-wrap;
     }
   }
 }
@@ -444,6 +451,26 @@ select {
     &:focus {
       outline: none;
       border-color: #1a73e8;
+    }
+
+    //Scrollbar styling
+    &::-webkit-scrollbar {
+      width: 8px;
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: theme-var('surface-secondary');
+      border-radius: 4px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: theme-var('border');
+      border-radius: 4px;
+
+      &:hover {
+        background: theme-var('text-secondary');
+      }
     }
   }
 }
@@ -574,6 +601,21 @@ const sendMessage = async () => {
 
   const messageContent = newMessage.value
   newMessage.value = '' // Clear input
+
+  // Development mode
+  if (import.meta.env.VITE_DEV === 'true') {
+    const mockMessage: MessageContent = {
+      message: messageContent,
+      sender_id: currentPlayerId.value || 'license:dev_user',
+      sender_name: 'Dev User',
+      sent_at: new Date().toISOString(),
+      isOwnMessage: true,
+    }
+
+    messages.value.push(mockMessage)
+    await scrollToBottom()
+    return
+  }
 
   const response = await fetchNui<{success: boolean, messageId: number}>('addMessage', {
     report_id: report.value.id,

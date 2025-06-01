@@ -336,7 +336,7 @@ onMounted(() => {
 
 .reports-grid {
   flex: 1;
-  max-height: calc(90vh - 200px);
+  max-height: calc(90vh - 40px);
   overflow-y: auto;
   
   .report-cards {

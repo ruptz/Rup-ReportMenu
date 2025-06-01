@@ -96,6 +96,17 @@ lib.callback.register('rup-reportmenu:createReport', function(source, data)
             description = 'A new report has been created by ' .. GetPlayerName(source),
             icon = 'fa-solid fa-exclamation-triangle',
             color = '#FF0000'
+        })        
+        -- Webhook
+        sendDiscordWebhook('createReport', {
+            reportId = id,
+            title = data.title,
+            description = data.description,
+            fields = {
+                Player = { value = PlayerName },
+                Priority = { value = data.priority or 'medium' },
+                Status = { value = 'open' }
+            }
         })
         return { success = true, reportId = id }
     else
@@ -142,9 +153,25 @@ lib.callback.register('rup-reportmenu:deleteReport', function(source, data)
         return { success = false }
     end
 
+    -- Get details on the report and messages before we delete it for the webhook
+    local reportResult = MySQL.single.await('SELECT * FROM reports WHERE id = ?', {data.reportId})
+    local messagesResult = MySQL.query.await('SELECT messages, sender_id, sender_name FROM report_messages WHERE report_id = ?', {data.reportId})
+    
+    -- Delete report!
     local result = MySQL.query.await('DELETE FROM reports WHERE id = ?', {data.reportId})
     if result.affectedRows > 0 then
         TriggerClientEvent('rup-reportmenu:client:refreshReports', -1)
+        
+        -- Webhook
+        if reportResult then
+            sendDiscordWebhook('deleteReport', {
+                reportId = data.reportId,
+                report = reportResult,
+                messages = messagesResult,
+                deletedBy = GetPlayerName(source)
+            })
+        end
+        
         return { success = true }
     end
     return { success = false }
@@ -158,9 +185,8 @@ lib.callback.register('rup-reportmenu:addMessage', function(source, data)
     if not Player then return { success = false } end    
     
     local existing = MySQL.single.await('SELECT * FROM report_messages WHERE report_id = ? AND sender_id = ?', {data.report_id, license})
-    
-    local newMessage = {
-        message = data.message,
+      local newMessage = {
+        message = data.message or '',
         sender_id = license,
         sender_name = playerName,
         sent_at = os.date('!%Y-%m-%d %H:%M:%S')
