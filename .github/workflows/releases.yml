@@ -1,0 +1,96 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  create-release:
+    name: Build and Create Tagged release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install archive tools
+        run: sudo apt install zip
+
+      - name: Checkout source code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.repository.default_branch }}
+
+      - name: Get variables
+        id: get_vars
+        run: |
+          echo 'SHORT_SHA=$(git rev-parse --short HEAD)' >> $GITHUB_OUTPUT
+          echo 'DATE=$(date +'%D')' >> $GITHUB_OUTPUT
+
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.x
+          cache: "npm"
+          cache-dependency-path: "web/package-lock.json"
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: web
+
+      - name: Run build
+        run: npm run build
+        working-directory: web
+        env:
+          CI: false
+
+      - name: Bump manifest version
+        run: |
+          # Extract version from tag (remove 'v' prefix)
+          VERSION=${GITHUB_REF_NAME#v}
+          # Update fxmanifest.lua version
+          sed -i "s/version '[^']*'/version '$VERSION'/" fxmanifest.lua
+        env:
+          TGT_RELEASE_VERSION: ${{ github.ref_name }}
+
+      - name: Update tag ref
+        uses: EndBug/latest-tag@latest
+        with:
+          tag-name: ${{ github.ref_name }}
+
+      - name: Bundle files
+        run: |
+          mkdir -p ./temp/Rup-ReportMenu
+          mkdir -p ./temp/Rup-ReportMenu/web
+          mkdir -p ./temp/Rup-ReportMenu/client
+          mkdir -p ./temp/Rup-ReportMenu/server
+          
+          # Copy main files
+          cp ./{README.md,LICENSE,fxmanifest.lua,config.lua} ./temp/Rup-ReportMenu 2>/dev/null || true
+          
+          # Copy client files
+          cp -r ./client/* ./temp/Rup-ReportMenu/client/ 2>/dev/null || true
+          
+          # Copy server files  
+          cp -r ./server/* ./temp/Rup-ReportMenu/server/ 2>/dev/null || true
+          
+          # Copy built web files
+          cp -r ./web/dist ./temp/Rup-ReportMenu/web/ 2>/dev/null || true
+          
+          # Copy language files
+          cp -r ./web/public/lang.json ./temp/Rup-ReportMenu/web/ 2>/dev/null || true
+          
+          # Create the zip file
+          cd ./temp && zip -r ../Rup-ReportMenu.zip ./Rup-ReportMenu
+
+      - name: Create Release
+        uses: "marvinpinto/action-automatic-releases@v1.2.1"
+        id: auto_release
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          title: "Rup-ReportMenu ${{ github.ref_name }}"
+          prerelease: false
+          files: Rup-ReportMenu.zip
+
+        env:
+          CI: false
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
