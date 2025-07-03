@@ -1,6 +1,6 @@
 # Node modules
 web/node_modules
-# Build output
-web/package-lock.json
 # Report Transcripts
 transcripts/*.txt
+# Miscellaneous
+NOTES.md
