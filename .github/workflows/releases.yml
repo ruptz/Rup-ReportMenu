@@ -5,6 +5,10 @@ on:
     tags:
       - "v*.*.*"
 
+permissions:
+  contents: write
+  actions: read
+
 jobs:
   create-release:
     name: Build and Create Tagged release
