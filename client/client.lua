@@ -29,7 +29,7 @@ end, false)
 if Config.Debug then
     RegisterCommand('sendmessage', function()
         data = {
-            report_id = 2,
+            report_id = 32,
             message = "This is a test message!!!!???????",
             license = "license:1234567890abcdef",
             name = "Test Player",
@@ -101,6 +101,11 @@ RegisterNUICallback('updateReport', function(data, cb)
     cb({ success = success })
 end)
 
+RegisterNUICallback('getPlayerLicenses', function(data, cb)    
+    local success = lib.callback.await('rup-reportmenu:getPlayerLicenses', false, data)
+    cb(success)
+end)
+
 RegisterNUICallback('deleteReport', function(data, cb)
     debugPrint('^3[Rup-ReportMenu]^0 Deleting report:', data.reportId)
     local success = lib.callback.await('rup-reportmenu:deleteReport', false, data)
@@ -156,6 +161,17 @@ RegisterNUICallback('getReportMessages', function(data, cb)
     cb(messages or {})
 end)
 
+RegisterNUICallback('getLang', function(data, cb)
+    cb({ language = Config.Language.Default })
+end)
+
+RegisterNUICallback('getConfig', function(data, cb)
+    cb({
+        fiveManageApiKey = Config.FiveManage.ApiKey,
+        deleteMedia = Config.FiveManage.DeleteMedia
+    })
+end)
+
 -- Events to handle reports
 RegisterNetEvent('rup-reportmenu:client:refreshReports')
 AddEventHandler('rup-reportmenu:client:refreshReports', function()    
@@ -174,5 +190,14 @@ AddEventHandler('rup-reportmenu:client:refreshMessages', function(reportId)
     SendNUIMessage({
         type = "updateMessages",
         id = reportId
+    })
+end)
+
+RegisterNetEvent('rup-reportmenu:client:deleteReportMedia')
+AddEventHandler('rup-reportmenu:client:deleteReportMedia', function(data)  
+    debugPrint('^3[Rup-ReportMenu]^0 Deleting media for report:', data.reportId)
+    SendNUIMessage({
+        type = "deleteReportMedia",
+        messages = data.messages
     })
 end)

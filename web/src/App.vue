@@ -10,11 +10,13 @@ import { useNuiEvent } from '@/composables/useNuiEvent'
 import { fetchNui as mockFetchNui } from '@/utils/mockNui'
 import { fetchNui as prodFetchNui } from '@/utils/fetchNui'
 import { useThemeStore } from '@/stores/theme'
+import { useLang } from '@/composables/useLang'
 
 const isDevelopment = import.meta.env.VITE_DEV === 'true'
 const fetchNui = isDevelopment ? mockFetchNui : prodFetchNui
 const visible = ref(isDevelopment)
 const themeStore = useThemeStore()
+const { loadLanguages } = useLang()
 
 useNuiEvent('openReportMenu', () => {
   visible.value = true
@@ -36,8 +38,10 @@ const handleKeyPress = (e: KeyboardEvent) => {
 
 onMounted(async () => {
   await themeStore.loadTheme()
-  window.addEventListener('keydown', handleKeyPress)
   document.documentElement.classList.toggle('theme-dark', themeStore.theme === 'dark')
+  await loadLanguages()
+  console.log('Rup-ReportMenu Loaded, Enjoy!')
+  window.addEventListener('keydown', handleKeyPress)
 })
 </script>
 

@@ -1,41 +1,41 @@
 <template>
   <div class="new-report">
     <div class="form-header">
-      <button class="button" @click="router.push('/')">← Back</button>
-      <h1>New Report</h1>
+      <button class="button" @click="router.push('/')">{{ t('newreport.backToReports') }}</button>
+      <h1>{{ t('newreport.title') }}</h1>
     </div>
 
     <form @submit.prevent="submitReport" class="report-form">
       <div class="form-group">
-        <label>Title</label>
-        <input v-model="form.title" type="text" required placeholder="Brief description of the issue">
+        <label>{{ t('newreport.title2') }}</label>
+        <input v-model="form.title" type="text" required :placeholder="t('newreport.titlePlaceholder')">
       </div>
 
       <div class="form-group">
-        <label>Report Against (Optional)</label>
-        <input v-model="form.reported_name" type="text" placeholder="Player name">
+        <label>{{ t('newreport.reportAgainst') }}</label>
+        <input v-model="form.reported_name" type="text" :placeholder="t('newreport.reportAgainstPlaceholder')">
       </div>
 
       <div class="form-group">
-        <label>Description</label>
+        <label>{{ t('newreport.description') }}</label>
         <textarea 
           v-model="form.description" 
           required 
-          placeholder="Provide detailed information about your report..."
+          :placeholder="t('newreport.descriptionPlaceholder')"
         ></textarea>
       </div>
 
       <div class="form-group">
-        <label>Priority</label>
+        <label>{{ t('newreport.priority') }}</label>
         <select v-model="form.priority">
-          <option value="low">Low</option>
-          <option value="medium">Medium</option>
-          <option value="high">High</option>
+          <option value="low">{{ t('prioTypes.low') }}</option>
+          <option value="medium">{{ t('prioTypes.medium') }}</option>
+          <option value="high">{{ t('prioTypes.high') }}</option>
         </select>
       </div>
 
       <button type="submit" class="button submit-button" :disabled="submitting">
-        {{ submitting ? 'Submitting...' : 'Submit Report' }}
+        {{ submitting ? t('newreport.sumbitting') : t('newreport.sumbit') }}
       </button>
     </form>
   </div>
@@ -44,10 +44,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useLang } from '@/composables/useLang'
 import { fetchNui as mockFetchNui } from '@/utils/mockNui'
 import { fetchNui as prodFetchNui } from '@/utils/fetchNui'
 
 const fetchNui = import.meta.env.VITE_DEV === 'true' ? mockFetchNui : prodFetchNui
+const { t } = useLang()
 const router = useRouter()
 const submitting = ref(false)
 

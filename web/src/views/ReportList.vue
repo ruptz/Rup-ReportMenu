@@ -2,10 +2,10 @@
   <div class="dashboard">
     <div class="dashboard-header">      
       <div class="header-content">
-        <h1>Reports Dashboard</h1>
+        <h1>{{ t('list.title') }}</h1>
         <div class="header-actions">
           <button v-if="permissionStore.canCreateReports" @click="createNewReport" class="button">
-            <span class="icon">+</span> New Report
+            <span class="icon">+</span> {{ t('list.newreport') }}
           </button>
           <ThemeToggle class="theme-toggle" />
         </div>
@@ -15,57 +15,57 @@
     <div class="dashboard-content">
       <div class="dashboard-sidebar">        
         <div class="sidebar-section">
-          <h3>Search</h3>
+          <h3>{{ t('list.search') }}</h3>
           <div class="search-box">
             <input 
               type="text" 
               v-model="searchQuery" 
-              placeholder="Search by title or ID..."
+              :placeholder="t('list.searchPlaceholder')"
               class="search-input"
             />
           </div>
         </div>
         <div class="sidebar-section">
-          <h3>Filters</h3>
+          <h3>{{ t('list.filters') }}</h3>
           <div class="filter-options">
             <select v-model="statusFilter">
-              <option value="">All Statuses</option>
-              <option value="open">Open</option>
-              <option value="in_progress">In Progress</option>
-              <option value="closed">Closed</option>
+              <option value="">{{ t('list.allStatuses') }}</option>
+              <option value="open">{{ t('status.open') }}</option>
+              <option value="in_progress">{{ t('status.inProgress') }}</option>
+              <option value="closed">{{ t('status.closed') }}</option>
             </select>
             <select v-model="priorityFilter">
-              <option value="">All Priorities</option>
-              <option value="low">Low</option>
-              <option value="medium">Medium</option>
-              <option value="high">High</option>
+              <option value="">{{ t('list.allProiorities') }}</option>
+              <option value="low">{{ t('prioTypes.low') }}</option>
+              <option value="medium">{{ t('prioTypes.medium') }}</option>
+              <option value="high">{{ t('prioTypes.high') }}</option>
             </select>            
             <select v-model="dateFilter">
-              <option value="">All Dates</option>
-              <option value="oldest">Last Updated (Oldest)</option>
-              <option value="newest">Last Updated (Newest)</option>
+              <option value="">{{ t('list.allDates') }}</option>
+              <option value="oldest">{{ t('list.lastUpdatedOldest') }}</option>
+              <option value="newest">{{ t('list.lastUpdatedNewest') }}</option>
             </select>
           </div>
         </div>
         
         <div class="sidebar-section">
-          <h3>Overview</h3>
+          <h3>{{ t('list.overview') }}</h3>
           <div class="stats">
               <div class="stat-card">
               <div class="stat-value">{{ reports.length }}</div>
-              <div class="stat-label">Total Reports</div>
+              <div class="stat-label">{{ t('list.totalReports') }}</div>
             </div>
             <div class="stat-card open">
               <div class="stat-value">{{ reports.filter(r => r.status?.toLowerCase() === 'open').length }}</div>
-              <div class="stat-label">Open</div>
+              <div class="stat-label">{{ t('status.open') }}</div>
             </div>
             <div class="stat-card in-progress">
               <div class="stat-value">{{ reports.filter(r => r.status?.toLowerCase() === 'in_progress').length }}</div>
-              <div class="stat-label">In Progress</div>
+              <div class="stat-label">{{ t('status.inProgress') }}</div>
             </div>
             <div class="stat-card closed">
               <div class="stat-value">{{ reports.filter(r => r.status?.toLowerCase() === 'closed').length }}</div>
-              <div class="stat-label">Closed</div>
+              <div class="stat-label">{{ t('status.closed') }}</div>
             </div>
           </div>
         </div>
@@ -74,12 +74,12 @@
       <div class="reports-grid">
         <div v-if="loading" class="loading">
           <div class="loading-spinner"></div>
-          Loading reports...
+          {{ t('common.loading') }}
         </div>
         <div v-else-if="filteredReports.length === 0" class="no-reports">
           <div class="empty-state">
-            <span class="material-icons">inbox</span>
-            <p>No reports found</p>
+            <span class="material-icons">{{ t('list.inbox') }}</span>
+            <p>{{ t('list.noReportsFound') }}</p>
           </div>
         </div>
         <div v-else class="report-cards">
@@ -112,13 +112,15 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { usePermissionStore } from '@/stores/permissions'
-import ThemeToggle from '@/components/ThemeToggle.vue'
+import { useLang } from '@/composables/useLang'
 import { fetchNui as mockFetchNui } from '@/utils/mockNui'
 import { fetchNui as prodFetchNui } from '@/utils/fetchNui'
+import { format } from 'date-fns'
 import type { Report } from '@/types'
+import ThemeToggle from '@/components/ThemeToggle.vue'
 
 const fetchNui = import.meta.env.VITE_DEV === 'true' ? mockFetchNui : prodFetchNui
-import { format } from 'date-fns'
+const { t } = useLang()
 
 const router = useRouter()
 const permissionStore = usePermissionStore()

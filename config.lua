@@ -3,6 +3,11 @@ Config = {}
 Config.Debug = false
 Config.DebugPrint = false
 
+-- Language
+Config.Language = { -- en, es
+    Default = 'en',
+}
+
 -- Permissions
 Config.Permissions = {
     -- Admin
@@ -28,4 +33,10 @@ Config.Discord = {
     ImageUrl = 'https://i.imgur.com/OZyXBv0.png', 
     ReportEmbedColor = 16711680, -- Red
     CreateEmebedColor = 65280, -- Green
+}
+
+-- FiveManage API
+Config.FiveManage = {
+    ApiKey = "YOUR_API_KEY",  -- Replace with your actual API key (https://fivemanage.com/)
+    DeleteMedia = true,       -- Delete media files after report deletion
 }

@@ -161,6 +161,10 @@ lib.callback.register('rup-reportmenu:deleteReport', function(source, data)
     local result = MySQL.query.await('DELETE FROM reports WHERE id = ?', {data.reportId})
     if result.affectedRows > 0 then
         TriggerClientEvent('rup-reportmenu:client:refreshReports', -1)
+        if Config.FiveManage.DeleteMedia then
+            local mediaData = { reportId = data.reportId, messages = messagesResult }
+            TriggerClientEvent('rup-reportmenu:client:deleteReportMedia', -1, mediaData)
+        end
         
         -- Webhook
         if reportResult then
@@ -184,8 +188,15 @@ lib.callback.register('rup-reportmenu:addMessage', function(source, data)
     local playerName = data.name or GetPlayerName(source)
     if not Player then return { success = false } end    
     
+    local reportExists = MySQL.scalar.await('SELECT id FROM reports WHERE id = ?', {data.report_id})
+    if not reportExists then
+        debugPrint('^1[Rup-ReportMenu]^0 Report ID does not exist:', data.report_id)
+        return { success = false, error = 'Report not found' }
+    end
+    
     local existing = MySQL.single.await('SELECT * FROM report_messages WHERE report_id = ? AND sender_id = ?', {data.report_id, license})
-      local newMessage = {
+    
+    local newMessage = {
         message = data.message or '',
         sender_id = license,
         sender_name = playerName,
@@ -202,13 +213,15 @@ lib.callback.register('rup-reportmenu:addMessage', function(source, data)
             id = existing.id
         end
     else
-        local params = {
-            report_id = data.report_id,
-            sender_id = license,
-            sender_name = playerName,
-            messages = json.encode({newMessage})
-        }
-        id = MySQL.insert.await('INSERT INTO report_messages SET ?', {params})
+        id = MySQL.insert.await([[
+            INSERT INTO report_messages (report_id, sender_id, sender_name, messages)
+            VALUES (?, ?, ?, ?)
+        ]], {
+            data.report_id,
+            license,
+            playerName,
+            json.encode({newMessage})
+        })
     end
 
     if id then
@@ -355,4 +368,22 @@ lib.callback.register('rup-reportmenu:updateUserPreferences', function(source, d
         data.theme
     })
     return { success = affectedRows > 0 }
+end)
+
+-- Get player license by type
+lib.callback.register('rup-reportmenu:getPlayerLicenses', function(source, data)
+    local playerLicense = data.playerLicense
+    local licenseType = data.licenseType
+    
+    if not playerLicense or not licenseType then
+        return { success = false, error = 'Missing parameters' }
+    end
+    
+    local license = GetPlayerLicensesByLicense(playerLicense, licenseType)
+    
+    if license and license ~= 0 then
+        return { success = true, license = license }
+    else
+        return { success = false, error = 'License not found' }
+    end
 end)

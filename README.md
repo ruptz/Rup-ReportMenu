@@ -55,6 +55,16 @@ Config.Cooldowns = {
 }
 ```
 
+### 📷 FiveManage Settings
+
+Edit `config.lua` for FiveManage to work correctly:
+```lua
+Config.FiveManage = {
+    ApiKey = "YOUR_APIKEY",  -- Replace with your actual API key
+    DeleteMedia = true,      -- Delete media files after report deletion
+}
+```
+
 ## 🎮 Usage
 
 ### Player Commands
