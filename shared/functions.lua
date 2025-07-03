@@ -62,12 +62,6 @@ function GetPlayerLicensesByLicense(license, type)
     for _, playerId in ipairs(GetPlayers()) do
         local identifiers = GetPlayerIdentifiers(playerId)
         for _, id in ipairs(identifiers) do
-            print(json.encode({
-                playerId = playerId,
-                id = id,
-                license = license,
-                type = type
-            }, { indent = true }))
             if id == license then
                 if not type then
                     debugPrint("Type is nil, returning playerId:", playerId)
