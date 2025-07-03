@@ -3,7 +3,7 @@ game 'gta5'
 
 author 'Ruptz'
 description 'Report Menu System for Standalone'
-version '1.0.1'
+version '1.0.2'
 lua54 'yes'
 
 ui_page 'web/dist/index.html'

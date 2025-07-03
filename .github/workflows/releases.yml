@@ -75,9 +75,6 @@ jobs:
           # Copy built web files
           cp -r ./web/dist ./temp/Rup-ReportMenu/web/ 2>/dev/null || true
           
-          # Copy language files
-          cp -r ./web/public/lang.json ./temp/Rup-ReportMenu/web/ 2>/dev/null || true
-          
           # Create the zip file
           cd ./temp && zip -r ../Rup-ReportMenu.zip ./Rup-ReportMenu
 
