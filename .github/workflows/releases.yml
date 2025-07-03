@@ -61,6 +61,7 @@ jobs:
           mkdir -p ./temp/Rup-ReportMenu/web
           mkdir -p ./temp/Rup-ReportMenu/client
           mkdir -p ./temp/Rup-ReportMenu/server
+          mkdir -p ./temp/Rup-ReportMenu/shared
           
           # Copy main files
           cp ./{README.md,LICENSE,fxmanifest.lua,config.lua} ./temp/Rup-ReportMenu 2>/dev/null || true
@@ -70,6 +71,9 @@ jobs:
           
           # Copy server files  
           cp -r ./server/* ./temp/Rup-ReportMenu/server/ 2>/dev/null || true
+
+          # Copy shared files  
+          cp -r ./shared/* ./temp/Rup-ReportMenu/shared/ 2>/dev/null || true
           
           # Copy built web files
           cp -r ./web/dist ./temp/Rup-ReportMenu/web/ 2>/dev/null || true
