@@ -51,8 +51,7 @@ jobs:
         run: |
           # Extract version from tag (remove 'v' prefix)
           VERSION=${GITHUB_REF_NAME#v}
-          # Update fxmanifest.lua version
-          sed -i "s/version '[^']*'/version '$VERSION'/" fxmanifest.lua
+          sed -i "s/^version '[^']*'/version '$VERSION'/" fxmanifest.lua
         env:
           TGT_RELEASE_VERSION: ${{ github.ref_name }}
 
