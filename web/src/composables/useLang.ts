@@ -22,27 +22,36 @@ const isLoaded = ref(false)
 const loadLanguages = async (): Promise<void> => {
   try {
     
-    // Get config from nui
-    const langResponse = await fetchNui<{ language: string }>('getLang', {})
-    const serverLang = langResponse?.language || 'en'
+    const possiblePaths = [
+      '/lang.json',
+      '/web/dist/lang.json',
+    ]
     
-    // Load lang.json
-    const response = await fetch('/lang.json')
-    if (response.ok) {
-      languageData.value = await response.json()
-      
-      // Set language based on config.lua
-      if (languageData.value[serverLang]) {
-        currentLanguage.value = serverLang
-      } else {
-        currentLanguage.value = 'en'
-        console.warn('Server language not found, defaulting to English')
+    for (const path of possiblePaths) {
+      try {
+        const response = await fetch(path)
+        
+        if (response.ok) {
+          languageData.value = await response.json()
+          
+          // Get config from nui
+          const langResponse = await fetchNui<{ language: string }>('getLang', {})
+          const serverLang = langResponse?.language || 'en'
+          
+          if (languageData.value[serverLang]) {
+            currentLanguage.value = serverLang
+          } else {
+            currentLanguage.value = 'en'
+          }
+          
+          isLoaded.value = true
+          return
+        }
+      } catch (err) {
+        console.log(`${path} - Failed:`, err)
       }
-      
-      isLoaded.value = true
-    } else {
-      console.error('Failed to load language file:', response.status)
     }
+    
   } catch (error) {
     console.error('Error loading language system:', error)
   }
